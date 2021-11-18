@@ -17,11 +17,11 @@ def validate_resp(response):
         return 1
 
 def request(session, i):
-    url = "https://jsonplaceholder.typicode.com/posts"
+    url = "https://localhost:4443/posts"
     headers = {
     }
     try:
-     with session.get(url,headers=headers, timeout=(0.6,0.95)) as response:
+     with session.get(url,headers=headers, timeout=(0.6,0.95),verify=False) as response:
 #        data = response.text
 #
 #        if response.status_code != 200:
@@ -33,7 +33,8 @@ def request(session, i):
         return (i,rv)
     except requests.exceptions.ReadTimeout:
         return (i,2)
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as e:
+        print(e)
         return (i,3)
 
 async def start_async_process():
