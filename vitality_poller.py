@@ -21,7 +21,7 @@ def request(session, i):
     headers = {
     }
     try:
-     with session.get(url,headers=headers, timeout=(0.4,0.85)) as response:
+     with session.get(url,headers=headers, timeout=(0.6,0.95)) as response:
 #        data = response.text
 #
 #        if response.status_code != 200:
@@ -40,6 +40,8 @@ async def start_async_process():
     x=[-1]*1500
     with ThreadPoolExecutor(max_workers=50) as executor:
         with requests.Session() as session:
+            adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
+            session.mount('https://',adapter)
             session.mount('https://example.com', Pkcs12Adapter(pkcs12_filename='certs/keyStore.p12', pkcs12_password='123456'))
             loop = asyncio.get_event_loop()
             START_TIME = default_timer()
