@@ -4,11 +4,16 @@ import io
 
 # Define data
 data = {
-    'pus_suffixes': [
+    'pus': [
+        'PU1', 
+        'PU1', 
+        'PU1', 
+        'PU1', 
+        'PU1', 
         'PU1', 
         'PU22'
     ],
-    'base_url': 'https://address_of_apigee/path_to_ods',
+    'base_url': 'https://localhost:8443/prefix_to',
     'cert_file_path': './cert.pfx' ,
     'read_time_out_seconds': 0.8,
     'connection_time_out_seconds': 0.3

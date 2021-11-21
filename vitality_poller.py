@@ -6,8 +6,12 @@ from timeit import default_timer
 from concurrent.futures import ThreadPoolExecutor
 import vitality_conf
 
-START_TIME = default_timer()
 
+
+def load_conf():
+    global __VITALITY_CONF__
+    __VITALITY_CONF__=vitality_conf.get_conf()
+    print(__VITALITY_CONF__)
 
 #for now i just make sure that the response
 def validate_resp(response):
@@ -17,7 +21,8 @@ def validate_resp(response):
         return 1
 
 def request(session, i):
-    url = "https://localhost:4443/posts"
+#    url = "https://localhost:8443/abcdefghij"
+    url = __VITALITY_CONF__.get('base_url')+__VITALITY_CONF__.get('pus')[i]
     headers = {
     }
     try:
@@ -38,21 +43,20 @@ def request(session, i):
         return (i,3)
 
 async def start_async_process():
-    x=[-1]*1500
+    x=[-1]*len(__VITALITY_CONF__.get('pus'))
     with ThreadPoolExecutor(max_workers=50) as executor:
         with requests.Session() as session:
             adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
             session.mount('https://',adapter)
             session.mount('https://example.com', Pkcs12Adapter(pkcs12_filename='certs/keyStore.p12', pkcs12_password='123456'))
             loop = asyncio.get_event_loop()
-            START_TIME = default_timer()
             tasks = [
                 loop.run_in_executor(
                     executor,
                     request,
                     *(session,i)
                 )
-                for i in range(1500)
+                for i in range(len(__VITALITY_CONF__.get('pus')))
             ]
             for response in await asyncio.gather(*tasks):
                (j,d)=response
@@ -61,6 +65,7 @@ async def start_async_process():
 
 
 def poll_all():
+    load_conf()
     loop = asyncio.get_event_loop()
     future = asyncio.ensure_future(start_async_process())
     loop.run_until_complete(future)

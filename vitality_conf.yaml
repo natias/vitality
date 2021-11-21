@@ -1,6 +1,12 @@
-base_url: https://address_of_apigee/path_to_ods
+base_url: https://localhost:8443/prefix_to
 cert_file_path: ./cert.pfx
-pus_suffixes:
+connection_time_out_seconds: 0.3
+pus:
+- PU1
+- PU1
+- PU1
+- PU1
+- PU1
 - PU1
 - PU22
-time_out_ms: 1000
+read_time_out_seconds: 0.8
