@@ -22,7 +22,7 @@ def validate_resp(response):
 
 def request(session, i):
 #    url = "https://localhost:8443/abcdefghij"
-    url = __VITALITY_CONF__.get('base_url')+__VITALITY_CONF__.get('pus')[i]
+    url = __VITALITY_CONF__.get('base_url_server_part')+__VITALITY_CONF__.get('base_url_path')+__VITALITY_CONF__.get('pus')[i]
     headers = {
     }
     try:
@@ -48,7 +48,7 @@ async def start_async_process():
         with requests.Session() as session:
             adapter = requests.adapters.HTTPAdapter(pool_connections=100, pool_maxsize=100)
             session.mount('https://',adapter)
-            session.mount('https://example.com', Pkcs12Adapter(pkcs12_filename='certs/keyStore.p12', pkcs12_password='123456'))
+            session.mount(__VITALITY_CONF__.get('base_url_server_part'), Pkcs12Adapter(pkcs12_filename='certs/keyStore.p12', pkcs12_password='123456'))
             loop = asyncio.get_event_loop()
             tasks = [
                 loop.run_in_executor(

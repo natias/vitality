@@ -1,9 +1,8 @@
-base_url: https://localhost:8443/prefix_to
+base_url_path: /prefixi
+base_url_server_part: https://localhost:8443
 cert_file_path: ./cert.pfx
 connection_time_out_seconds: 0.3
 pus:
-- PU1
-- PU1
 - PU1
 - PU1
 - PU1
