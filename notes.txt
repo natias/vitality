@@ -1,3 +1,10 @@
+
+i tried this first
 https://github.com/m-click/requests_pkcs12
+
+
+due to instabilty of requests in async io context (namely the ssl implementation is not thread safe), i moved to aiohttp
+
+
 
 

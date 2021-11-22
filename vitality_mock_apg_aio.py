@@ -1,9 +1,12 @@
+import time
 from aiohttp import web
 import ssl
+import asyncio
 
 async def handle(request):
     name = request.match_info.get('name', "Anonymous")
     text = "Hello, " + name
+  #  await asyncio.sleep(0.8)
     return web.Response(text=text)
 
 app = web.Application()

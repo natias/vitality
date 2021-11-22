@@ -17,10 +17,10 @@ def refresh_conf():
     global conf_data 
     f_updata=os.path.getmtime(conf_file_name)
     if f_updata>lupdate:
-       print("reloading conf data")
+       #print("reloading conf data")
        with open(conf_file_name, 'r') as stream:
           conf_data = yaml.safe_load(stream)
-          print(conf_data)
+          #print(conf_data)
        lupdate=f_updata 
     else:
        print("not reloading")

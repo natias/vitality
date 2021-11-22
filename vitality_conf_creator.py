@@ -5,17 +5,17 @@ import io
 # Define data
 data = {
     'pus': [
-        'PU1', 
-        'PU1', 
-        'PU1', 
-        'PU1', 
-        'PU22'
+        '',
+        '',
+        '',
+        '',
+        '',
     ],
     'base_url_server_part': 'https://localhost:8443',
-    'base_url_path': '/prefixi',
-    'cert_file_path': './cert.pfx' ,
-    'read_time_out_seconds': 0.8,
-    'connection_time_out_seconds': 0.3
+    'base_url_path': '/posts',
+    'cert_file_path': 'certs/keyStore.p12' ,
+    'read_time_out_seconds': 1.2,
+    'connection_time_out_seconds': 1.1
 }
 
 # Write YAML file
