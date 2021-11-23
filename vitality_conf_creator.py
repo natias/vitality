@@ -20,6 +20,9 @@ data = {
     }
 }
 
+for i in range(3001):
+    data.get('pus').append({'name':'ODS PU - GetLoans', 'url_specifier':'GetLoans'+str(i)})
+
 # Write YAML file
 with io.open('./vitality_conf.yaml', 'w', encoding='utf8') as outfile:
     yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)

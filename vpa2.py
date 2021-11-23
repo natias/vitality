@@ -12,10 +12,23 @@ def load_conf():
 #    print(__VITALITY_CONF__)
 
 
+async def on_request_start(session, trace_config_ctx, params):
+    trace_config_ctx.start = asyncio.get_event_loop().time()
+
+async def on_request_end(session, trace_config_ctx, params):
+    elapsed = asyncio.get_event_loop().time() - trace_config_ctx.start
+    print("Request took {}".format(elapsed))
+
+async def on_dns_resolvehost_end(session, trace_config_ctx, params):
+    trace_config_ctx.start_conn_create = asyncio.get_event_loop().time()
+
+async def on_connection_create_end(session, trace_config_ctx, params):
+    elapsed = asyncio.get_event_loop().time() - trace_config_ctx.start_conn_create
+    print("estab conn took {}".format(elapsed))
 
 
 async def fetch(session, i, sslcontext):
-    url = __VITALITY_CONF__.get('base_url_server_part')+__VITALITY_CONF__.get('base_url_path')+__VITALITY_CONF__.get('pus')[i]
+    url = __VITALITY_CONF__.get('base_url_server_part')+__VITALITY_CONF__.get('base_url_path')+__VITALITY_CONF__.get('pus')[i].get('url_specifier')
     start_time = time.monotonic_ns()
     try:
      async with session.get(url, ssl=sslcontext) as response:
@@ -28,7 +41,12 @@ async def fetch(session, i, sslcontext):
 
 
 async def fetch_all( loop):
-    async with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=500)) as session:
+    trace_config = aiohttp.TraceConfig()
+#    trace_config.on_dns_resolvehost_end.append(on_dns_resolvehost_end)
+#    trace_config.on_connection_create_end.append(on_connection_create_end)
+    trace_config.on_request_start.append(on_request_start)
+    trace_config.on_request_end.append(on_request_end)
+    async with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=100),trace_configs=[trace_config]) as session:
         ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH,cafile='certs/mock/cert.pem')
         ssl_context.check_hostname = False
         ssl_context.load_cert_chain(certfile='certs/cert.pem', keyfile='certs/myKey.pem')
@@ -40,6 +58,7 @@ def decide_status(stata):
     return "Healthy"
 
 def calcTotalRespTime(stata):
+    print(stata)
     return sum(e for a,b,c,e in stata)
 
 def generate_result_list(stata):
