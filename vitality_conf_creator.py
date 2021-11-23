@@ -5,17 +5,19 @@ import io
 # Define data
 data = {
     'pus': [
-        '',
-        '',
-        '',
-        '',
-        '',
+        {'name':'ODS PU - GetAccounts', 'url_specifier':'getaccounts'},
+        {'name':'ODS PU - GetLoans', 'url_specifier':'GetLoans'},
     ],
     'base_url_server_part': 'https://localhost:8443',
     'base_url_path': '/posts',
     'cert_file_path': 'certs/keyStore.p12' ,
     'read_time_out_seconds': 1.2,
-    'connection_time_out_seconds': 1.1
+    'connection_time_out_seconds': 1.1,
+    'applicationInfo':{
+      'applicationName': 'ODS',
+      'environment': 'Productuion',
+      'Version': '1.0.0.9' 
+    }
 }
 
 # Write YAML file
