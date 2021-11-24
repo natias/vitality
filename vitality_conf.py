@@ -27,7 +27,7 @@ def refresh_conf():
     return
 
 def get_conf():
-    print("current conf data"+str(conf_data))
+    #print("current conf data"+str(conf_data))
     refresh_conf()
     return conf_data
 

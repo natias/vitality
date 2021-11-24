@@ -44,8 +44,8 @@ async def fetch_all( loop):
     trace_config = aiohttp.TraceConfig()
 #    trace_config.on_dns_resolvehost_end.append(on_dns_resolvehost_end)
 #    trace_config.on_connection_create_end.append(on_connection_create_end)
-    trace_config.on_request_start.append(on_request_start)
-    trace_config.on_request_end.append(on_request_end)
+#    trace_config.on_request_start.append(on_request_start)
+#    trace_config.on_request_end.append(on_request_end)
     async with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=100),trace_configs=[trace_config]) as session:
         ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH,cafile='certs/mock/cert.pem')
         ssl_context.check_hostname = False
@@ -58,11 +58,26 @@ def decide_status(stata):
     return "Healthy"
 
 def calcTotalRespTime(stata):
-    print(stata)
+    #print(stata)
     return sum(e for a,b,c,e in stata)
 
+
+def to_scom(status):
+    (i,t,c, e)=status
+    scom_s='Healthy' if c == 200 else 'NotHealthy' 
+    scom_d='OK, elapsed '+str(e//1000000)+'ms'
+    return (scom_s,scom_d)
+
 def generate_result_list(stata):
-    return "" 
+    result_list=[]
+    for idx , status in enumerate(stata):
+        if isinstance ( status , Exception):# or isinstance (status ,  Errrorrrr):
+            result_list.append({'name' :  __VITALITY_CONF__.get('pus')[idx].get('name'),'status':'error' })
+        else:
+            (i,t,c, e)=status
+            scom_s,scom_d=to_scom(status)
+            result_list.append({'name' :  __VITALITY_CONF__.get('pus')[idx].get('name'),'status':scom_s,'description':scom_d,'responseTime':str(e//1000000) })
+    return result_list
 
 def prepare_answer(stata):
     answer={}
@@ -76,7 +91,7 @@ def poll_all():
     load_conf()
     loop = asyncio.get_event_loop()
     stata = loop.run_until_complete(fetch_all( loop))
-    print((stata))
+    #print((stata))
     answer=prepare_answer(stata)
     return(json.dumps(answer))
 
