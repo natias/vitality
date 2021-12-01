@@ -23,7 +23,8 @@ def refresh_conf():
           #print(conf_data)
        lupdate=f_updata 
     else:
-       print("not reloading")
+       pass
+       #print("not reloading")
     return
 
 def get_conf():

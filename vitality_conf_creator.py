@@ -20,7 +20,7 @@ data = {
     }
 }
 
-for i in range(100):
+for i in range(1000):
     data.get('pus').append({'name':'ODS PU - GetLoans', 'url_specifier':'GetLoans'+str(i)})
 
 # Write YAML file

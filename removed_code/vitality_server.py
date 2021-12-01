@@ -6,7 +6,7 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
-#import vitality_poller
+import ssl
 import vpa2
 
 class S(BaseHTTPRequestHandler):
@@ -33,6 +33,12 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
+    httpd.socket = ssl.wrap_socket(
+    httpd.socket,
+    keyfile="certs/server/key.pem",
+    certfile='certs/server/cert.pem',
+    password='123456',
+    server_side=True)
     logging.info('Starting httpd...\n')
     try:
         httpd.serve_forever()
